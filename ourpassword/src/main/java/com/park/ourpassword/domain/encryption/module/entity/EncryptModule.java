@@ -1,11 +1,8 @@
 package com.park.ourpassword.domain.encryption.module.entity;
 
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import com.park.ourpassword.domain.encryption.module.EncryptModuleEnum;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
 public class EncryptModule {
 
 	@Id

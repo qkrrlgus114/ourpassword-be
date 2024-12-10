@@ -37,7 +37,7 @@ public class DecryptHistory {
 	private LocalDateTime accessAt;
 
 	@Column(nullable = false, length = 500)
-	private String key;
+	private String secretKey;
 
 	@Column(nullable = false, length = 100)
 	private String encryptedPassword;
