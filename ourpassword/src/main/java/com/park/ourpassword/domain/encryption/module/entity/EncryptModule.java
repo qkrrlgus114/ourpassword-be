@@ -22,5 +22,5 @@ public class EncryptModule {
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	private EncryptModuleEnum encryptModuleEnum;
+	private EncryptModuleEnum module;
 }
