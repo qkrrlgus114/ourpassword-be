@@ -1,5 +1,8 @@
 package com.park.ourpassword.domain.member.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 
 import com.park.ourpassword.domain.member.repository.LoginRepository;
@@ -19,5 +22,16 @@ public class LoginService {
 	 * */
 	public long totalVisitedCount() {
 		return loginRepository.totalVisitedCount();
+	}
+
+	/**
+	 * 오늘 하루 방문자 수 조회하는 메서드
+	 * */
+	public long dailyVisitedCount() {
+		LocalDateTime startDate = LocalDate.now().atStartOfDay();
+		LocalDateTime endDate = LocalDate.now().atTime(23, 59, 59, 999999);
+		log.info("startDate : {}", startDate);
+		log.info("endDate : {}", endDate);
+		return loginRepository.dailyVisitedCount(startDate, endDate);
 	}
 }

@@ -20,11 +20,21 @@ public class LoginController {
 	private final LoginService loginService;
 
 	/**
-	 * 누적 방문자수 조회하는 API
+	 * 누적 방문자 수 조회하는 API
 	 * */
-	@GetMapping("/visited")
+	@GetMapping("/visited-all")
 	public ResponseEntity<ApiResponse> getTotalVisitedCount() {
 		long cnt = loginService.totalVisitedCount();
+
+		return ResponseEntity.ok(ApiResponse.successDataMessage(cnt, ""));
+	}
+
+	/**
+	 * 오늘의 방문자 수를 조회하는 API
+	 * */
+	@GetMapping("/visited-today")
+	public ResponseEntity<ApiResponse> getDailyVisitedCount() {
+		long cnt = loginService.dailyVisitedCount();
 
 		return ResponseEntity.ok(ApiResponse.successDataMessage(cnt, ""));
 	}
