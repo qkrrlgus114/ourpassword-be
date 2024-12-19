@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.park.ourpassword.domain.encryption.encrypt.entity.EncryptHistory;
 
-public interface EncryptRepository extends JpaRepository<EncryptHistory, Long> {
+public interface EncryptHistoryRepository extends JpaRepository<EncryptHistory, Long> {
 
+	// 누적 암호화 횟수 가져오기
 	@Query("SELECT COUNT(*) FROM EncryptHistory")
 	int totalEncryptCount();
 }
