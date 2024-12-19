@@ -17,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -48,4 +49,16 @@ public class EncryptHistory {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "encrypt_module_id")
 	private EncryptModule encryptModule;
+
+	@Builder
+	public EncryptHistory(String ip, LocalDateTime accessAt, String secretKey, String rawPassword,
+		String encryptedPassword,
+		EncryptModule encryptModule) {
+		this.ip = ip;
+		this.accessAt = accessAt;
+		this.secretKey = secretKey;
+		this.rawPassword = rawPassword;
+		this.encryptedPassword = encryptedPassword;
+		this.encryptModule = encryptModule;
+	}
 }
