@@ -10,10 +10,9 @@ import com.park.ourpassword.domain.encryption.encrypt.dto.request.EncryptRequest
 import com.park.ourpassword.domain.encryption.encrypt.dto.response.EncryptResponseDTO;
 import com.park.ourpassword.domain.encryption.encrypt.entity.EncryptHistory;
 import com.park.ourpassword.domain.encryption.encrypt.repository.EncryptHistoryRepository;
-import com.park.ourpassword.domain.encryption.module.EncryptModuleEnum;
 import com.park.ourpassword.domain.encryption.module.entity.EncryptModule;
 import com.park.ourpassword.domain.encryption.module.repository.ModuleRepository;
-import com.park.ourpassword.domain.encryption.module.util.AES128;
+import com.park.ourpassword.domain.encryption.module.util.AES;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -40,11 +39,8 @@ public class EncryptService {
 	 * */
 	@Transactional
 	public EncryptResponseDTO encryptValue(EncryptRequestDTO encryptRequestDTO, HttpServletRequest request) {
-		String value = "";
-
-		if (encryptRequestDTO.encryptModule() == EncryptModuleEnum.AES_128) {
-			value = AES128.encrypt(encryptRequestDTO.value().getBytes(), encryptRequestDTO.key().getBytes());
-		}
+		EncryptResponseDTO encrypt = AES.encrypt(encryptRequestDTO.key(), encryptRequestDTO.value(),
+			encryptRequestDTO.iv());
 
 		List<EncryptModule> encryptModuleList = moduleRepository.findAll();
 		EncryptModule encryptModule = encryptModuleList.stream()
@@ -57,11 +53,11 @@ public class EncryptService {
 			.accessAt(LocalDateTime.now())
 			.rawPassword(encryptRequestDTO.value())
 			.secretKey(encryptRequestDTO.key())
-			.encryptedPassword(value)
+			.encryptedPassword(encrypt.encryptedValue())
 			.ip(request.getRemoteAddr())
 			.encryptModule(encryptModule).build();
 		encryptHistoryRepository.save(encryptHistory);
 
-		return EncryptResponseDTO.builder().value(value).build();
+		return encrypt;
 	}
 }

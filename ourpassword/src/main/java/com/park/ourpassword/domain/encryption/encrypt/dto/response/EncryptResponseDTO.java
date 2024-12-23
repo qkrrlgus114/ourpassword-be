@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record EncryptResponseDTO(
-	String value
+	String encryptedValue,
+	String iv
 ) {
 }

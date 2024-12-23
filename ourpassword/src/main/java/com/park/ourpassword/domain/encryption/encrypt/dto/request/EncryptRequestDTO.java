@@ -8,6 +8,8 @@ import lombok.Builder;
 public record EncryptRequestDTO(
 	EncryptModuleEnum encryptModule,
 	String key,
-	String value
+	String value,
+	String paddingOption,
+	boolean iv
 ) {
 }
