@@ -2,6 +2,7 @@ package com.park.ourpassword.domain.encryption.module.controller;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +27,8 @@ public class ModuleController {
 	 * 사용 가능한 암호화 모듈 리스트를 반환하는 API
 	 * */
 	@GetMapping("/modules")
-	public ResponseEntity<ApiResponse> getEncryptModules() {
-		List<ModuleResponseDTO> moduleList = moduleService.getModuleList();
+	public ResponseEntity<ApiResponse> getEncryptModules(HttpServletRequest request) {
+		List<ModuleResponseDTO> moduleList = moduleService.getModuleList(request);
 
 		return ResponseEntity.ok(ApiResponse.successDataMessage(moduleList, ""));
 	}

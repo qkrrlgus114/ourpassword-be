@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.park.ourpassword.domain.member.service.LoginService;
+import com.park.ourpassword.domain.member.service.MemberService;
 import com.park.ourpassword.util.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -15,16 +15,16 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api")
-public class LoginController {
+public class MemberController {
 
-	private final LoginService loginService;
+	private final MemberService memberService;
 
 	/**
 	 * 누적 방문자 수 조회하는 API
 	 * */
 	@GetMapping("/visited-all")
 	public ResponseEntity<ApiResponse> getTotalVisitedCount() {
-		long cnt = loginService.totalVisitedCount();
+		long cnt = memberService.totalVisitedCount();
 
 		return ResponseEntity.ok(ApiResponse.successDataMessage(cnt, ""));
 	}
@@ -34,7 +34,7 @@ public class LoginController {
 	 * */
 	@GetMapping("/visited-today")
 	public ResponseEntity<ApiResponse> getDailyVisitedCount() {
-		long cnt = loginService.dailyVisitedCount();
+		long cnt = memberService.dailyVisitedCount();
 
 		return ResponseEntity.ok(ApiResponse.successDataMessage(cnt, ""));
 	}

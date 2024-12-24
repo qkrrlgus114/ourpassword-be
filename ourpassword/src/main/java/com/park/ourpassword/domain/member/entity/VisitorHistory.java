@@ -2,6 +2,7 @@ package com.park.ourpassword.domain.member.entity;
 
 import java.time.LocalDateTime;
 
+import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class LoginHistory {
+public class VisitorHistory {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +31,10 @@ public class LoginHistory {
 
 	@CreatedDate
 	private LocalDateTime accessAt;
+
+	@Builder
+	public VisitorHistory(String ip, LocalDateTime accessAt) {
+		this.ip = ip;
+		this.accessAt = accessAt;
+	}
 }

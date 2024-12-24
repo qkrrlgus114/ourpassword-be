@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.park.ourpassword.domain.member.repository.LoginRepository;
+import com.park.ourpassword.domain.member.repository.VisitorRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +14,16 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class LoginService {
+public class MemberService {
 
-	private final LoginRepository loginRepository;
+	private final VisitorRepository visitorRepository;
 
 	/**
 	 * 현재까지 누적 방문자 조회하는 메서드
 	 * */
 	@Transactional(readOnly = true)
 	public long totalVisitedCount() {
-		return loginRepository.totalVisitedCount();
+		return visitorRepository.totalVisitedCount();
 	}
 
 	/**
@@ -33,6 +33,6 @@ public class LoginService {
 	public long dailyVisitedCount() {
 		LocalDateTime startDate = LocalDate.now().atStartOfDay();
 		LocalDateTime endDate = LocalDate.now().atTime(23, 59, 59, 999999);
-		return loginRepository.dailyVisitedCount(startDate, endDate);
+		return visitorRepository.dailyVisitedCount(startDate, endDate);
 	}
 }
