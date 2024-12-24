@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.park.ourpassword.domain.encryption.module.dto.response.ModuleDTO;
+import com.park.ourpassword.domain.encryption.module.dto.response.ModuleResponseDTO;
 import com.park.ourpassword.domain.encryption.module.entity.EncryptModule;
 import com.park.ourpassword.domain.encryption.module.repository.ModuleRepository;
 
@@ -24,17 +24,9 @@ public class ModuleService {
 	 * 모든 암호화 모듈을 가져오는 메서드
 	 * */
 	@Transactional(readOnly = true)
-	public List<ModuleDTO> getModuleList() {
-		List<EncryptModule> encryptModuleList = moduleRepository.findAll();
-		List<ModuleDTO> moduleDTOList = new ArrayList<>();
-
-		encryptModuleList.stream()
-			.forEach(module -> {
-				ModuleDTO moduleDTO = new ModuleDTO(module.getId(), module.getModule().getEngName(),
-					module.getModule().getKorName());
-				moduleDTOList.add(moduleDTO);
-			});
-
-		return moduleDTOList;
+	public List<ModuleResponseDTO> getModuleList() {
+		return  moduleRepository.findAll().stream()
+				.map(ModuleResponseDTO::of)
+				.toList();
 	}
 }

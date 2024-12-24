@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.park.ourpassword.domain.encryption.encrypt.dto.request.EncryptRequestDTO;
 import com.park.ourpassword.domain.encryption.encrypt.dto.response.EncryptResponseDTO;
 import com.park.ourpassword.domain.encryption.encrypt.service.EncryptService;
-import com.park.ourpassword.util.config.response.ApiResponse;
+import com.park.ourpassword.util.response.ApiResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

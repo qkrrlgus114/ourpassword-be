@@ -1,4 +1,4 @@
-package com.park.ourpassword.util.config.response;
+package com.park.ourpassword.util.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;

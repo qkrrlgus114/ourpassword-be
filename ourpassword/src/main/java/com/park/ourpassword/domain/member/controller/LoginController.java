@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.park.ourpassword.domain.member.service.LoginService;
-import com.park.ourpassword.util.config.response.ApiResponse;
+import com.park.ourpassword.util.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

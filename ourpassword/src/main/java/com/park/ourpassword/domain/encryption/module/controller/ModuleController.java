@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.park.ourpassword.domain.encryption.module.dto.response.ModuleDTO;
+import com.park.ourpassword.domain.encryption.module.dto.response.ModuleResponseDTO;
 import com.park.ourpassword.domain.encryption.module.service.ModuleService;
-import com.park.ourpassword.util.config.response.ApiResponse;
+import com.park.ourpassword.util.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class ModuleController {
 	 * */
 	@GetMapping("/modules")
 	public ResponseEntity<ApiResponse> getEncryptModules() {
-		List<ModuleDTO> moduleList = moduleService.getModuleList();
+		List<ModuleResponseDTO> moduleList = moduleService.getModuleList();
 
 		return ResponseEntity.ok(ApiResponse.successDataMessage(moduleList, ""));
 	}

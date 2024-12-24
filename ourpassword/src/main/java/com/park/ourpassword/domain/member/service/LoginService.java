@@ -33,8 +33,6 @@ public class LoginService {
 	public long dailyVisitedCount() {
 		LocalDateTime startDate = LocalDate.now().atStartOfDay();
 		LocalDateTime endDate = LocalDate.now().atTime(23, 59, 59, 999999);
-		log.info("startDate : {}", startDate);
-		log.info("endDate : {}", endDate);
 		return loginRepository.dailyVisitedCount(startDate, endDate);
 	}
 }
