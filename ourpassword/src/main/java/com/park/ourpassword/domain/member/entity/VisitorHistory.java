@@ -1,20 +1,14 @@
 package com.park.ourpassword.domain.member.entity;
 
-import java.time.LocalDateTime;
-
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,19 +16,19 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AuditingEntityListener.class)
 public class VisitorHistory {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(nullable = false, length = 45)
-	private String ip;
+    @Column(nullable = false, length = 45)
+    private String ip;
 
-	@CreatedDate
-	private LocalDateTime accessAt;
+    @CreatedDate
+    private LocalDateTime accessAt;
 
-	@Builder
-	public VisitorHistory(String ip, LocalDateTime accessAt) {
-		this.ip = ip;
-		this.accessAt = accessAt;
-	}
+    @Builder
+    public VisitorHistory(String ip, LocalDateTime accessAt) {
+        this.ip = ip;
+        this.accessAt = accessAt;
+    }
 }
