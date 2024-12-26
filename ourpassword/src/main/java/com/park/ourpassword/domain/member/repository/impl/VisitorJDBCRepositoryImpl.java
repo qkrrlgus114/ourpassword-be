@@ -22,6 +22,12 @@ public class VisitorJDBCRepositoryImpl implements VisitorJDBCRepository {
     private final DataSource dataSource;
     private static final String SQL = "INSERT INTO visitor_history (ip, access_at) VALUES(?, ?)";
 
+    /**
+     * 방문자 캐싱 데이터 bulkInsert 진행하는 메서드
+     * <p>
+     * 1. 100개씩 끊어서 bulkInsert 진행.
+     * 2. 중간에 터지면 반복으로 Insert 진행
+     */
     @Override
     @Transactional
     public void bulkInsert(List<VisitorHistory> visitorHistories) {
@@ -53,6 +59,7 @@ public class VisitorJDBCRepositoryImpl implements VisitorJDBCRepository {
                     ps.execute();
                 }
             } catch (SQLException ex) {
+                log.error("Visitor SingleInsert ERROR : {}", e.getMessage());
                 throw new RuntimeException(ex);
             }
         }
