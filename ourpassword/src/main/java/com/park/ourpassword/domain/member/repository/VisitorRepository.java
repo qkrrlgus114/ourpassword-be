@@ -15,7 +15,8 @@ public interface VisitorRepository extends JpaRepository<VisitorHistory, Long> {
 
     // 하루 방문자 수 조회 쿼리
     @Query("SELECT COUNT(*) FROM VisitorHistory WHERE accessAt BETWEEN :startDate AND :endDate")
-    long dailyVisitedCount(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+    long dailyVisitedCount(@Param("startDate") LocalDateTime startDate,
+                           @Param("endDate") LocalDateTime endDate);
 
 
 }

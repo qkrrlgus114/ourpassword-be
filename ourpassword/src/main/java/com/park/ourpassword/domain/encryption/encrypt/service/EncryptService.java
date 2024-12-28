@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,6 +36,16 @@ public class EncryptService {
     @Transactional(readOnly = true)
     public int totalEncryptCount() {
         return encryptHistoryRepository.totalEncryptCount();
+    }
+
+    /**
+     * 하루 암호화 횟수 가져오기
+     */
+    @Transactional(readOnly = true)
+    public int todayEncryptCount() {
+        LocalDateTime startDate = LocalDate.now().atStartOfDay();
+        LocalDateTime endDate = LocalDate.now().atTime(23, 59, 59, 999999);
+        return encryptHistoryRepository.todayEncryptCount(startDate, endDate);
     }
 
     /**

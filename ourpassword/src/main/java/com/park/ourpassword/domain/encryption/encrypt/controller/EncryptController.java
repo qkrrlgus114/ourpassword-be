@@ -24,32 +24,34 @@ public class EncryptController {
      * 누적 암호화 횟수 가져오는 API
      */
     @GetMapping("/encrypt-all")
-    public ResponseEntity<ApiResponse> getTotalEncryptCount() {
-        int totalEncryptCount = encryptService.totalEncryptCount();
+    public ResponseEntity<ApiResponse<Integer>> getTotalEncryptCount() {
+        return ResponseEntity.ok(ApiResponse.successDataMessage(encryptService.totalEncryptCount(), ""));
+    }
 
-        return ResponseEntity.ok(ApiResponse.successDataMessage(totalEncryptCount, ""));
+    /**
+     * 하루 암호화 횟수 가져오는 API
+     */
+    @GetMapping("/encrypt-today")
+    public ResponseEntity<ApiResponse<Integer>> getTodayEncryptCount() {
+        return ResponseEntity.ok(ApiResponse.successDataMessage(encryptService.todayEncryptCount(), ""));
     }
 
     /**
      * 값 암호화 진행하는 API
      */
     @PostMapping("/encrypt")
-    public ResponseEntity<ApiResponse> encryptValue(@RequestBody EncryptRequestDTO encryptRequestDTO,
-                                                    HttpServletRequest request) {
-        EncryptResponseDTO encryptResponseDTO = encryptService.encryptValue(encryptRequestDTO, request);
-
-        return ResponseEntity.ok(ApiResponse.successDataMessage(encryptResponseDTO, "암호화 완료"));
+    public ResponseEntity<ApiResponse<EncryptResponseDTO>> encryptValue(@RequestBody EncryptRequestDTO encryptRequestDTO,
+                                                                        HttpServletRequest request) {
+        return ResponseEntity.ok(ApiResponse.successDataMessage(encryptService.encryptValue(encryptRequestDTO, request), "암호화 완료"));
     }
 
     /**
      * 값 복호화 진행하는 API
      */
     @PostMapping("/decrypt")
-    public ResponseEntity<ApiResponse> decryptValue(@RequestBody DecryptRequestDTO decryptRequestDTO,
-                                                    HttpServletRequest request) {
-        DecryptResponseDTO decryptResponseDTO = encryptService.decryptValue(decryptRequestDTO, request);
-
-        return ResponseEntity.ok(ApiResponse.successDataMessage(decryptResponseDTO, "복호화 완료"));
+    public ResponseEntity<ApiResponse<DecryptResponseDTO>> decryptValue(@RequestBody DecryptRequestDTO decryptRequestDTO,
+                                                                        HttpServletRequest request) {
+        return ResponseEntity.ok(ApiResponse.successDataMessage(encryptService.decryptValue(decryptRequestDTO, request), "복호화 완료"));
     }
 
 }
