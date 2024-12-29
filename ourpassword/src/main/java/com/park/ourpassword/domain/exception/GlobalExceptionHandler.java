@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CommonException.class)
-    public ResponseEntity<ApiResponse<?>> getException(BaseException e) {
+    public ResponseEntity<ApiResponse> getException(BaseException e) {
         return ResponseEntity.status(e.getStatus()).body(ApiResponse.errorMessage(e.getExceptionMessage()));
     }
 }
