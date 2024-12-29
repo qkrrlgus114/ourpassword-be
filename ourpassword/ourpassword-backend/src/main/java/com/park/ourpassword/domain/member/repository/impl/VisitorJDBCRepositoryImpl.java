@@ -48,7 +48,7 @@ public class VisitorJDBCRepositoryImpl implements VisitorJDBCRepository {
             }
             ps.executeBatch();
         } catch (Exception e) {
-            log.error("Visitor BulkInsert ERROR : {}", e.getMessage());
+            log.error("Visitor BulkInsert ERRORr : {}", e.getMessage());
 
             try (Connection conn = dataSource.getConnection();
                  PreparedStatement ps = conn.prepareStatement(SQL)) {
