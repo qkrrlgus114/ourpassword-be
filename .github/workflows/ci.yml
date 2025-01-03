@@ -80,7 +80,7 @@ jobs:
       working-directory: ourpassword
       run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/our-password:latest
     
-    # EC2에 배포 진행
+    # EC2에 배포 진행 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
       with:
