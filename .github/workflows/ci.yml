@@ -70,7 +70,7 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-    # 도커 이미지 빌드 | [도커 이미지 이름 / repo 이름:버전]
+    # 도커 이미지 빌드 | [도커 이미지 이름 / repo 이름:버전] 
     - name: Build Docker Image
       working-directory: ourpassword
       run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/our-password:latest .
