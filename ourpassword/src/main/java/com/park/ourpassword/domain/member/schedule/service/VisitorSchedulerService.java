@@ -3,6 +3,7 @@ package com.park.ourpassword.domain.member.schedule.service;
 import com.park.ourpassword.domain.member.dto.cache.VisitorCacheInfo;
 import com.park.ourpassword.domain.member.entity.VisitorHistory;
 import com.park.ourpassword.domain.member.repository.VisitorJDBCRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
@@ -25,6 +26,7 @@ public class VisitorSchedulerService {
     /**
      * 방문자 캐싱 데이터 저장하는 메서드
      */
+    @Transactional
     public void saveVisitorCacheData() {
         log.info("visitorCache Scheduler start");
         Cache cache = cacheManager.getCache(VISITOR_CACHE);
@@ -37,6 +39,8 @@ public class VisitorSchedulerService {
                 .map(VisitorCacheInfo::toEntity).toList();
 
         visitorJDBCRepository.bulkInsert(visitorHistories);
+
+        cache.evict(VISITOR_LIST);
 
         log.info("visitorCache Scheduler end");
     }
