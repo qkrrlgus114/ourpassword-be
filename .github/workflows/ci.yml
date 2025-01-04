@@ -90,4 +90,8 @@ jobs:
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/our-password:latest
           docker stop our-password || true
           docker rm our-password || true
-          docker run -d -p ${{ secrets.BACKEND_DOCKER_OUT_PORT }}:${{ secrets.BACKEND_DOCKER_IN_PORT }} --name our-password ${{ secrets.DOCKER_HUB_USERNAME }}/our-password:latest
+          docker run -d \
+            --network ec2-user_default \
+            -p ${{ secrets.BACKEND_DOCKER_OUT_PORT }}:${{ secrets.BACKEND_DOCKER_IN_PORT }} \
+            --name our-password \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/our-password:latest
