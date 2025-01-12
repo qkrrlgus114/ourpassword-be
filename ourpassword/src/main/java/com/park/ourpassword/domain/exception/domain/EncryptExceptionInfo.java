@@ -6,7 +6,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum EncryptExceptionInfo implements BaseException {
-    AES_256_ERROR_LENGTH("ENC-002", HttpStatus.BAD_REQUEST, "[AES_256] KEY의 길이는 32자여야 합니다.");
+    NOT_FOUND_VALUE("ENC-001", HttpStatus.BAD_REQUEST, "내용이 존재하지 않습니다."),
+    AES_256_ERROR_LENGTH("ENC-002", HttpStatus.BAD_REQUEST, "[AES_256] KEY의 길이는 32자여야 합니다."),
+    NOT_FOUND_MODULE("ENC-003", HttpStatus.BAD_REQUEST, "지원 가능한 모듈이 아닙니다."),
+    ERROR("ENC-999", HttpStatus.INTERNAL_SERVER_ERROR, "암호화 진행 중 문제가 발생했습니다.");
 
     private String code;
     private HttpStatus httpStatus;

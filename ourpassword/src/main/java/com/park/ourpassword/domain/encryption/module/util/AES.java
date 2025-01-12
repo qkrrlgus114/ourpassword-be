@@ -51,7 +51,8 @@ public class AES {
                     .encryptedValue(Base64.getEncoder().encodeToString(combined))
                     .build();
         } catch (Exception e) {
-            throw new RuntimeException("AES encryption failed", e);
+            log.error("[AES] encrypt Error : {}", e.getMessage());
+            throw new CommonException(EncryptExceptionInfo.ERROR);
         }
     }
 

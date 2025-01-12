@@ -11,6 +11,9 @@ import com.park.ourpassword.domain.encryption.encrypt.repository.EncryptHistoryR
 import com.park.ourpassword.domain.encryption.module.entity.EncryptModule;
 import com.park.ourpassword.domain.encryption.module.repository.ModuleRepository;
 import com.park.ourpassword.domain.encryption.module.util.AES;
+import com.park.ourpassword.domain.encryption.module.util.BcryptEncoder;
+import com.park.ourpassword.domain.exception.CommonException;
+import com.park.ourpassword.domain.exception.domain.EncryptExceptionInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +32,7 @@ public class EncryptService {
     private final EncryptHistoryRepository encryptHistoryRepository;
     private final DecryptHistoryRepository decryptHistoryRepository;
     private final ModuleRepository moduleRepository;
+    private final BcryptEncoder bcryptEncoder;
 
     /**
      * 누적 암호화 횟수 가져오기
@@ -53,7 +57,13 @@ public class EncryptService {
      */
     @Transactional
     public EncryptResponseDTO encryptValue(EncryptRequestDTO encryptRequestDTO, HttpServletRequest request) {
-        EncryptResponseDTO encrypt = AES.encrypt(encryptRequestDTO.key(), encryptRequestDTO.value());
+        EncryptResponseDTO encrypt = null;
+
+        switch (encryptRequestDTO.encryptModule()){
+            case AES_256 -> encrypt = AES.encrypt(encryptRequestDTO.key(), encryptRequestDTO.value());
+            case BCrypt -> encrypt = bcryptEncoder.encrypt(encryptRequestDTO.value());
+            default -> throw new CommonException(EncryptExceptionInfo.NOT_FOUND_MODULE);
+        }
 
         List<EncryptModule> encryptModuleList = moduleRepository.findAll();
         EncryptModule encryptModule = encryptModuleList.stream()
