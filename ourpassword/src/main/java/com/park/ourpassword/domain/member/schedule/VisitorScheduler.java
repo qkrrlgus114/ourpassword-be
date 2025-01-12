@@ -16,7 +16,7 @@ public class VisitorScheduler {
     /**
      * 1분마다 방문자수 저장하는 스케줄러 동작
      */
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 20000)
     public void saveVisitorCache() {
         visitorSchedulerService.saveVisitorCacheData();
     }

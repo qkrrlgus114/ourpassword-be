@@ -24,7 +24,7 @@ public class BcryptEncoder {
 
     public EncryptResponseDTO encrypt(String value){
         try{
-            if(value == null || value.isBlank()){
+           if(value == null || value.isBlank()){
                 throw new CommonException(EncryptExceptionInfo.NOT_FOUND_VALUE);
             }
 
