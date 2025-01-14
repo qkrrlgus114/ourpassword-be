@@ -12,8 +12,11 @@ import com.park.ourpassword.domain.encryption.module.entity.EncryptModule;
 import com.park.ourpassword.domain.encryption.module.repository.ModuleRepository;
 import com.park.ourpassword.domain.encryption.module.util.AES;
 import com.park.ourpassword.domain.encryption.module.util.BcryptEncoder;
+import com.park.ourpassword.domain.encryption.module.util.MD5;
+import com.park.ourpassword.domain.encryption.module.util.SHA;
 import com.park.ourpassword.domain.exception.CommonException;
 import com.park.ourpassword.domain.exception.domain.EncryptExceptionInfo;
+import com.park.ourpassword.util.IPUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,9 +62,12 @@ public class EncryptService {
     public EncryptResponseDTO encryptValue(EncryptRequestDTO encryptRequestDTO, HttpServletRequest request) {
         EncryptResponseDTO encrypt = null;
 
-        switch (encryptRequestDTO.encryptModule()){
+        switch (encryptRequestDTO.encryptModule()) {
             case AES_256 -> encrypt = AES.encrypt(encryptRequestDTO.key(), encryptRequestDTO.value());
             case BCrypt -> encrypt = bcryptEncoder.encrypt(encryptRequestDTO.value());
+            case MD_5 -> encrypt = MD5.encrypt(encryptRequestDTO.value());
+            case SHA_1, SHA_224, SHA_256, SHA_386, SHA_512 ->
+                    encrypt = SHA.encrypt(encryptRequestDTO.value(), encryptRequestDTO.encryptModule());
             default -> throw new CommonException(EncryptExceptionInfo.NOT_FOUND_MODULE);
         }
 
@@ -77,7 +83,7 @@ public class EncryptService {
                 .rawPassword(encryptRequestDTO.value())
                 .secretKey(encryptRequestDTO.key())
                 .encryptedPassword(encrypt.encryptedValue())
-                .ip(request.getRemoteAddr())
+                .ip(IPUtil.resolveArgument(request))
                 .encryptModule(encryptModule).build();
         encryptHistoryRepository.save(encryptHistory);
 
