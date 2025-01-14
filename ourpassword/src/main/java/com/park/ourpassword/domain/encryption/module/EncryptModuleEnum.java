@@ -14,5 +14,11 @@ public enum EncryptModuleEnum {
 	RSA,
 	SHA_256,
 	SHA_512,
-	BCrypt;
+	BCrypt,
+	MD5,
+	SHA1,
+	SHA224,
+	SHA256,
+	SHA386,
+	SHA512;
 }
