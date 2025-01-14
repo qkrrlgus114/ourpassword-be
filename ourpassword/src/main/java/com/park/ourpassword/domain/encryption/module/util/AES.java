@@ -27,7 +27,7 @@ public class AES {
     /**
      * AES 암호화
      */
-    public static EncryptResponseDTO encrypt(String key, String plainValue) {
+    public static EncryptResponseDTO encrypt(String key, String value) {
         try {
             if (key.length() != KEY_LENGTH) {
                 throw new CommonException(EncryptExceptionInfo.AES_256_ERROR_LENGTH);
@@ -41,7 +41,7 @@ public class AES {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
 
-            byte[] encrypted = cipher.doFinal(plainValue.getBytes());
+            byte[] encrypted = cipher.doFinal(value.getBytes());
 
             byte[] combined = new byte[IV_LENGTH + encrypted.length];
             System.arraycopy(iv, 0, combined, 0, IV_LENGTH);
