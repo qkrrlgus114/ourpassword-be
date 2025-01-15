@@ -19,13 +19,20 @@ public class SHA {
 
             sha.update(value.getBytes());
 
-            String encryptedValue = Base64.getEncoder().encodeToString(sha.digest());
-
             return EncryptResponseDTO.builder()
-                    .encryptedValue(encryptedValue)
+                    .encryptedValue(byteToHexString(md.digest());)
                     .build();
         } catch (Exception e) {
             throw new CommonException(EncryptExceptionInfo.ERROR);
         }
     }
+
+    private static String byteToHexString(byte[] data) {
+		StringBuilder sb = new StringBuilder();
+		for (byte b : data) {
+			sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+		}
+
+		return sb.toString();
+	}
 }
