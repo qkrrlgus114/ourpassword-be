@@ -20,7 +20,7 @@ public class SHA {
             sha.update(value.getBytes());
 
             return EncryptResponseDTO.builder()
-                    .encryptedValue(byteToHexString(md.digest()))
+                    .encryptedValue(byteToHexString(sha.digest()))
                     .build();
         } catch (Exception e) {
             throw new CommonException(EncryptExceptionInfo.ERROR);
