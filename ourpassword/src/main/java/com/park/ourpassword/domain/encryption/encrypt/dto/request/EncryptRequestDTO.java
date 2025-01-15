@@ -6,6 +6,7 @@ import lombok.Builder;
 @Builder
 public record EncryptRequestDTO(
         EncryptModuleEnum encryptModule,
+        String returnType,
         String key,
         String value
 ) {

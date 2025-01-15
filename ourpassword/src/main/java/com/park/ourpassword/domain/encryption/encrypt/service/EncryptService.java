@@ -63,11 +63,10 @@ public class EncryptService {
         EncryptResponseDTO encrypt = null;
 
         switch (encryptRequestDTO.encryptModule()) {
-            case AES_256 -> encrypt = AES.encrypt(encryptRequestDTO.key(), encryptRequestDTO.value());
-            case BCrypt -> encrypt = bcryptEncoder.encrypt(encryptRequestDTO.value());
-            case MD_5 -> encrypt = MD5.encrypt(encryptRequestDTO.value());
-            case SHA_1, SHA_224, SHA_256, SHA_386, SHA_512 ->
-                    encrypt = SHA.encrypt(encryptRequestDTO.value(), encryptRequestDTO.encryptModule());
+            case AES_256 -> encrypt = AES.encrypt(encryptRequestDTO);
+            case BCrypt -> encrypt = bcryptEncoder.encrypt(encryptRequestDTO);
+            case MD_5 -> encrypt = MD5.encrypt(encryptRequestDTO);
+            case SHA_1, SHA_224, SHA_256, SHA_384, SHA_512 -> encrypt = SHA.encrypt(encryptRequestDTO);
             default -> throw new CommonException(EncryptExceptionInfo.NOT_FOUND_MODULE);
         }
 
@@ -96,7 +95,7 @@ public class EncryptService {
     @Transactional
     public DecryptResponseDTO decryptValue(DecryptRequestDTO decryptRequestDTO, HttpServletRequest request) {
         DecryptResponseDTO decryptResponseDTO =
-                AES.decrypt(decryptRequestDTO.key(), decryptRequestDTO.encryptedValue());
+                AES.decrypt(decryptRequestDTO);
 
         List<EncryptModule> encryptModuleList = moduleRepository.findAll();
         EncryptModule encryptModule = encryptModuleList.stream()
