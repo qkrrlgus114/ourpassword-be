@@ -1,7 +1,7 @@
 package com.park.ourpassword.domain.encryption.module.util;
 
+import com.park.ourpassword.domain.encryption.encrypt.dto.request.EncryptRequestDTO;
 import com.park.ourpassword.domain.encryption.encrypt.dto.response.EncryptResponseDTO;
-import com.park.ourpassword.domain.encryption.module.EncryptModuleEnum;
 import com.park.ourpassword.domain.exception.CommonException;
 import com.park.ourpassword.domain.exception.domain.EncryptExceptionInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -10,29 +10,25 @@ import java.security.MessageDigest;
 import java.util.Base64;
 
 @Slf4j
-public class SHA {
+public class SHA extends BaseEncrypt {
 
-    public static EncryptResponseDTO encrypt(String value, EncryptModuleEnum encryptModuleEnum) {
+    public static EncryptResponseDTO encrypt(EncryptRequestDTO encryptRequestDTO) {
         try {
-            log.info("SHA 모듈 시작 : {}", encryptModuleEnum.name());
-            MessageDigest sha = MessageDigest.getInstance(encryptModuleEnum.name().replace("_", ""));
+            log.info("SHA 모듈 시작 : {}", encryptRequestDTO.encryptModule().name());
+            MessageDigest sha = MessageDigest.getInstance(encryptRequestDTO.encryptModule().name().replace("_", ""));
 
-            sha.update(value.getBytes());
+            sha.update(encryptRequestDTO.value().getBytes());
 
             return EncryptResponseDTO.builder()
-                    .encryptedValue(byteToHexString(sha.digest()))
+                    .encryptedValue(
+                            encryptRequestDTO.returnType().equals("base64") ?
+                                    Base64.getEncoder().encodeToString(sha.digest()) :
+                                    byteToHexString(sha.digest()))
                     .build();
         } catch (Exception e) {
             throw new CommonException(EncryptExceptionInfo.ERROR);
         }
     }
 
-    private static String byteToHexString(byte[] data) {
-		StringBuilder sb = new StringBuilder();
-		for (byte b : data) {
-			sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
-		}
 
-		return sb.toString();
-	}
 }

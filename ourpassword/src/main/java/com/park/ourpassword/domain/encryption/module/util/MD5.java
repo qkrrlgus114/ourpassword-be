@@ -1,5 +1,6 @@
 package com.park.ourpassword.domain.encryption.module.util;
 
+import com.park.ourpassword.domain.encryption.encrypt.dto.request.EncryptRequestDTO;
 import com.park.ourpassword.domain.encryption.encrypt.dto.response.EncryptResponseDTO;
 import com.park.ourpassword.domain.exception.CommonException;
 import com.park.ourpassword.domain.exception.domain.EncryptExceptionInfo;
@@ -14,22 +15,23 @@ import java.util.Base64;
  * 단뱡항 알고리즘
  */
 @Slf4j
-public class MD5 {
+public class MD5 extends BaseEncrypt {
 
     private static final String MD_5 = "MD5";
 
-    public static EncryptResponseDTO encrypt(String value) {
+    public static EncryptResponseDTO encrypt(EncryptRequestDTO encryptRequestDTO) {
         try {
             log.info("MD5 암호화 실행");
 
             MessageDigest md5 = MessageDigest.getInstance(MD_5);
 
-            md5.update(value.getBytes());
-
-            String encryptedValue = Base64.getEncoder().encodeToString(md5.digest());
+            md5.update(encryptRequestDTO.value().getBytes());
 
             return EncryptResponseDTO.builder()
-                    .encryptedValue(encryptedValue)
+                    .encryptedValue(
+                            encryptRequestDTO.returnType().equals("base64") ?
+                                    Base64.getEncoder().encodeToString(md5.digest()) :
+                                    byteToHexString(md5.digest()))
                     .build();
         } catch (Exception e) {
             throw new CommonException(EncryptExceptionInfo.ERROR);
