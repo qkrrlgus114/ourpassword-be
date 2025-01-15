@@ -5,18 +5,21 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+# 워크플로우 이름
+name: CI/CD
 
 on:
-  pull_request:
-    branches: [ "main" ]
+  # main 브랜치에 push하는 경우
   push:
     branches: [ "main" ]
 
+# 워크플로우에서 진행할 작업 정의
 jobs:
   ourpassword-be:
 
     runs-on: ubuntu-latest
+
+    # 워크플로우에게 repo 읽기 권한 설정정
     permissions:
       contents: read
 
@@ -28,6 +31,24 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    # application.yml 생성
+    - name: Create application.yml
+      working-directory: ourpassword
+      run: |
+        mkdir -p ./src/main/resources
+        echo ${{ secrets.MAIN_YML}} | base64 --decode > ./src/main/resources/application.yml
+    
+    # gradle caching - 캐싱을 통한 빌드 시간 향상(젠킨스에서는 기본이라지만, 깃허브액션은 직접 설정해야 함함)
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-  
+
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
 
@@ -35,6 +56,42 @@ jobs:
       working-directory: ourpassword
       run: chmod +x ./gradlew
 
+    # gradle 빌드 진행 -> jar 파일 생성
     - name: Build with Gradle Wrapper
       working-directory: ourpassword
       run: ./gradlew build -x test
+
+    # 도커 허브 로그인 진행
+    - name: Docker Hub Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+    # 도커 이미지 빌드 | [도커 이미지 이름 / repo 이름:버전] 
+    - name: Build Docker Image
+      working-directory: ourpassword
+      run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/our-password:latest .
+
+    # 도커 허브에 이미지 푸시
+    - name: Push Docker Image
+      working-directory: ourpassword
+      run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/our-password:latest
+    
+    # EC2에 배포 진행 
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/our-password:latest
+          docker stop our-password || true
+          docker rm our-password || true
+          docker run -d \
+            --network ec2-user_default \
+            -p ${{ secrets.BACKEND_DOCKER_OUT_PORT }}:${{ secrets.BACKEND_DOCKER_IN_PORT }} \
+            --name our-password \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/our-password:latest
